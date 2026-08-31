@@ -40,6 +40,7 @@ interface FishermanViewProps {
   isPlayingAudio: boolean;
   onToggleAudio: () => void;
   isInsideDeviceFrame?: boolean;
+  isSosActive?: boolean;
 }
 
 export const FishermanView: React.FC<FishermanViewProps> = ({
@@ -56,6 +57,7 @@ export const FishermanView: React.FC<FishermanViewProps> = ({
   isPlayingAudio,
   onToggleAudio,
   isInsideDeviceFrame = false,
+  isSosActive = false,
 }) => {
   const t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
   const [voiceQueryInput, setVoiceQueryInput] = useState('');
@@ -301,6 +303,7 @@ export const FishermanView: React.FC<FishermanViewProps> = ({
             recommendedRoute={decision.recommendedRoute}
             vessels={vessels}
             activeRole="fisherman"
+            isSosActive={isSosActive}
           />
 
           {decision.avoidInstructions.length > 0 && (

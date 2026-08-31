@@ -38,12 +38,22 @@ export default {
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'wave': 'wave 2s linear infinite',
+        'fadeIn': 'fadeIn 0.3s ease-out both',
+        'sos-blink': 'sosBlink 0.7s ease-in-out infinite',
       },
       keyframes: {
         wave: {
           '0%, 100%': { transform: 'rotate(0deg)' },
           '50%': { transform: 'rotate(14deg)' },
-        }
+        },
+        fadeIn: {
+          from: { opacity: '0', transform: 'translateY(8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        sosBlink: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.3' },
+        },
       }
     },
   },

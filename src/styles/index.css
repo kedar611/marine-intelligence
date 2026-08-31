@@ -6,10 +6,19 @@
   body {
     @apply bg-slate-100 text-slate-900 antialiased overflow-x-hidden;
     font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Tamil', 'Noto Sans Telugu', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Prevent text size adjustment on orientation change (mobile) */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 }
 
-/* Light / Daylight Nautical Theme (Default) */
+/* ─── Theme Variables ─────────────────────────────────────────────── */
+
 .theme-light {
   --bg-main: #f8fafc;
   --card-bg: #ffffff;
@@ -20,7 +29,6 @@
   --ocean-dark: #0369a1;
 }
 
-/* Bridge / Night Vision Mode */
 .theme-dark {
   --bg-main: #0b192c;
   --card-bg: #112238;
@@ -31,26 +39,107 @@
   --ocean-dark: #0284c7;
 }
 
-/* Clean accessible scrollbar */
+/* ─── Animations ──────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sosPulse {
+  0%, 100% { opacity: 1; r: 18; }
+  50%      { opacity: 0.4; r: 22; }
+}
+
+@keyframes sosRing {
+  0%   { r: 25; opacity: 0.8; stroke-width: 3; }
+  100% { r: 60; opacity: 0; stroke-width: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sos-pulse {
+  animation: sosPulse 0.8s ease-in-out infinite;
+}
+
+.sos-ring {
+  animation: sosRing 1.5s ease-out infinite;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────── */
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 8px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Touch active ripple effect for mobile buttons */
+/* ─── Mobile Touch Feedback ───────────────────────────────────────── */
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 button:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+}
+
+/* Prevent double-tap zoom on mobile nav buttons */
+nav button {
+  touch-action: manipulation;
+}
+
+/* ─── Safe Area (Notch / Home Indicator) ──────────────────────────── */
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ─── Selection Color ─────────────────────────────────────────────── */
+
+::selection {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+/* ─── SVG Animation Helpers (used in map) ─────────────────────────── */
+
+@keyframes svgPing {
+  0%   { transform: scale(1); opacity: 0.8; }
+  75%  { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.svg-ping {
+  animation: svgPing 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
 }

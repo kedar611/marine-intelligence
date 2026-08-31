@@ -26,6 +26,7 @@ interface OceanMapProps {
   recommendedRoute?: OptimizedRoute;
   vessels: VesselTrack[];
   activeRole: AppRole;
+  isSosActive?: boolean;
 }
 
 export const InteractiveOceanMap: React.FC<OceanMapProps> = ({
@@ -35,6 +36,7 @@ export const InteractiveOceanMap: React.FC<OceanMapProps> = ({
   recommendedRoute,
   vessels,
   activeRole,
+  isSosActive = false,
 }) => {
   const [mapLayer, setMapLayer] = useState<'pfz' | 'safety' | 'sst' | 'waves'>('pfz');
   const [showShippingLanes, setShowShippingLanes] = useState(true);
@@ -419,6 +421,76 @@ export const InteractiveOceanMap: React.FC<OceanMapProps> = ({
                 </g>
               );
             })}
+
+          {/* SOS Distress Beacon */}
+          {isSosActive && (
+            <g>
+              {/* Outer pulsing rings */}
+              <circle
+                cx={lonToX(vessels.find(v => v.id === 'V-01')?.lon || selectedCell.lon)}
+                cy={latToY(vessels.find(v => v.id === 'V-01')?.lat || selectedCell.lat)}
+                r="55"
+                fill="none"
+                stroke="#ef4444"
+                strokeWidth="3"
+                opacity="0.6"
+                className="animate-ping"
+              />
+              <circle
+                cx={lonToX(vessels.find(v => v.id === 'V-01')?.lon || selectedCell.lon)}
+                cy={latToY(vessels.find(v => v.id === 'V-01')?.lat || selectedCell.lat)}
+                r="35"
+                fill="none"
+                stroke="#ef4444"
+                strokeWidth="2.5"
+                opacity="0.8"
+                className="animate-pulse"
+              />
+              {/* Inner red SOS circle */}
+              <circle
+                cx={lonToX(vessels.find(v => v.id === 'V-01')?.lon || selectedCell.lon)}
+                cy={latToY(vessels.find(v => v.id === 'V-01')?.lat || selectedCell.lat)}
+                r="18"
+                fill="#dc2626"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+                className="animate-pulse"
+              />
+              {/* SOS text */}
+              <text
+                x={lonToX(vessels.find(v => v.id === 'V-01')?.lon || selectedCell.lon)}
+                y={latToY(vessels.find(v => v.id === 'V-01')?.lat || selectedCell.lat) + 4}
+                fill="#ffffff"
+                fontSize="11"
+                fontWeight="900"
+                textAnchor="middle"
+                className="animate-pulse"
+              >
+                SOS
+              </text>
+              {/* MAYDAY label */}
+              <rect
+                x={lonToX(vessels.find(v => v.id === 'V-01')?.lon || selectedCell.lon) - 40}
+                y={latToY(vessels.find(v => v.id === 'V-01')?.lat || selectedCell.lat) - 35}
+                width="80"
+                height="16"
+                rx="4"
+                fill="#dc2626"
+                className="animate-pulse"
+              />
+              <text
+                x={lonToX(vessels.find(v => v.id === 'V-01')?.lon || selectedCell.lon)}
+                y={latToY(vessels.find(v => v.id === 'V-01')?.lat || selectedCell.lat) - 23}
+                fill="#ffffff"
+                fontSize="9"
+                fontWeight="900"
+                textAnchor="middle"
+                letterSpacing="1"
+              >
+                ⚠ MAYDAY ACTIVE
+              </text>
+            </g>
+          )}
         </svg>
       </div>
 
@@ -444,6 +516,12 @@ export const InteractiveOceanMap: React.FC<OceanMapProps> = ({
             <span>Unsafe/Naval</span>
           </span>
         </div>
+
+        {isSosActive && (
+          <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-red-600 text-white text-[11px] font-extrabold animate-pulse">
+            <span>🚨 SOS DISTRESS ACTIVE</span>
+          </div>
+        )}
       </div>
     </div>
   );
